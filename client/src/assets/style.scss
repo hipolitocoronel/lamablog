@@ -84,7 +84,7 @@ input:focus, textarea:focus {
                 background: $white;
                 border-radius: 10px;
                 gap: 20px;
-                min-width: 310px;
+                max-width: 350px;
 
                 input {
                     border: none;
@@ -166,6 +166,12 @@ input:focus, textarea:focus {
                 }
             }
         }
+    }
+}
+
+@media screen and (max-width: 350px){
+    .navbar {
+        display: none;
     }
 }
 
@@ -260,6 +266,37 @@ input:focus, textarea:focus {
 
             }
         }
+    }
+}
+
+@media screen and (max-width: 350px){
+    .home {
+        width: 100%;
+        background: red;
+        .post{
+            flex-direction: column;
+            .image{
+                flex: 1;
+            }
+
+            .content{
+                flex: 1;
+
+                .title{
+                    font-size: 14px;
+                }
+
+                p{
+                    font-size: 10px;
+                }
+            }
+            &-footer{
+                button{
+                    width: 100%;
+                }
+            }
+        }
+
     }
 }
 

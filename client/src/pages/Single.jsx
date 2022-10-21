@@ -1,16 +1,19 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Editar from "../images/edit.png";
 import Eliminar from "../images/delete.png";
 import Perfil from "../images/perfil.jpg";
 import Sidebar from "../components/Sidebar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Comment from "../components/Comment";
 import { useContext } from "react";
 import DataContext from "../context/dataContex";
 import dayjs from "dayjs";
+import { removePost } from "../reducers/postReducer";
 
 function Single() {
     const postId = useLocation().pathname.split("/")[2];
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { currentUser } = useContext(DataContext);
 
@@ -20,25 +23,34 @@ function Single() {
     });
 
     const formatDate = () => {
-        const postDate = dayjs(post.date);
+        console.log(post);
+        const postDate = dayjs(post.updatedAt || post.createdAt);
+        console.log("ahora: ", postDate);
         const today = dayjs(new Date());
         const formats = [
             ["seconds", 60, " segundos"],
-            ["hours", 60, " horas"],
+            ["minutes", 60, " minutos"],
+            ["hours", 24, " horas"],
             ["days", 7, " días"],
         ];
 
         let diff = today.diff(postDate, "day");
         if (diff > 7) {
-            return "hola";
+            return `Publicado el ${dayjs(postDate).format("DD/MM/YY")}`;
         } else {
             for (const format of formats) {
                 diff = today.diff(postDate, format[0]);
+                console.log(diff);
                 if (diff <= format[1]) {
                     return `Publicado hace ${diff} ${format[2]}`;
                 }
             }
         }
+    };
+
+    const deletePost = () => {
+        dispatch(removePost(post));
+        navigate("/");
     };
 
     return (
@@ -59,7 +71,7 @@ function Single() {
                         </span>
                         <p>{post && formatDate()}</p>
                     </div>
-                    {post && currentUser.username === post.user.username && (
+                    {post && currentUser?.username === post.user.username && (
                         <div className="action">
                             <Link
                                 to={`/write?id=${post && post.id}`}
@@ -67,7 +79,11 @@ function Single() {
                             >
                                 <img src={Editar} alt="logo editar" />
                             </Link>
-                            <img src={Eliminar} alt="logo eliminar" />
+                            <img
+                                src={Eliminar}
+                                alt="logo eliminar"
+                                onClick={deletePost}
+                            />
                         </div>
                     )}
                 </div>
@@ -80,11 +96,7 @@ function Single() {
                 <Comment />
             </div>
 
-            {post && (
-                <Sidebar
-                    post={{ id: post?.id, cat: post.category.id }}
-                />
-            )}
+            {post && <Sidebar post={{ id: post?.id, cat: post.category.id }} />}
         </div>
     );
 }

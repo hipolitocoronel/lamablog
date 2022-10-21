@@ -5,13 +5,15 @@ const {
     getPosts,
     getPost,
     addPost,
+    uploadImg,
     updatePost,
     removePost,
 } = require("../controllers/post");
 
 postRouter.get("/", getPosts);
 postRouter.get("/:id", getPost);
-postRouter.post("/", uploadImage.single("file"), addPost);
+postRouter.post("/", addPost);
+postRouter.post("/upload", uploadImage.single("file"), uploadImg);
 postRouter.put("/", updatePost);
 postRouter.delete("/", removePost);
 

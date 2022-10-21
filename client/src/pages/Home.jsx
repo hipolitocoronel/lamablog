@@ -13,7 +13,7 @@ function Home() {
         if (state.cat === "ALL") {
             return state.posts;
         } else {
-            return state.posts.filter((post) => post.descripcion === cat);
+            return state.posts.filter((post) => post.category.description === cat);
         }
     });
 

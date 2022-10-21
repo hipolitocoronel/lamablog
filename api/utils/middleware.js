@@ -24,6 +24,21 @@ const storage = multer.diskStorage({
     },
 });
 
+const tokenExtractor = (req, res, next) => {
+    const authorization = req.get("authorization");
+
+    authorization && authorization.toLowerCase().startsWith("bearer ")
+        ? (req.token = authorization.substring(7))
+        : (req.token = null);
+
+    next();
+};
+
 const uploadImage = multer({ storage });
 
-module.exports = { requestLogger, unknownEndpoint, uploadImage };
+module.exports = {
+    requestLogger,
+    unknownEndpoint,
+    uploadImage,
+    tokenExtractor,
+};

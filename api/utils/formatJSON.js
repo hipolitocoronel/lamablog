@@ -4,7 +4,8 @@ const formatPost = (post) => {
         title: post.title,
         description: post.desc,
         image: post.img,
-        date: post.date,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
         category: {
             id: post.idCategory,
             description: post.descripcion,

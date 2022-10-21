@@ -54,6 +54,7 @@ function Register() {
                         required: "El correo es requerido",
                     })}
                 />
+                <input type="file" name="file" id="file"/>
                 <input
                     type="password"
                     placeholder="Contraseña"

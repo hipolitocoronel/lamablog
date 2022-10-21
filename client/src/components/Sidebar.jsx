@@ -6,7 +6,7 @@ function Sidebar({ post }) {
     const mostPosts = useSelector((state) => {
         const { posts } = state;
         return posts.filter(
-            (p) => p.category.description === post.cat && p.id !== post.id
+            (p) => p.category.id === post.cat && p.id !== post.id
         );
     });
 

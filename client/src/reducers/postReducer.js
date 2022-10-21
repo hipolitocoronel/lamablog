@@ -1,4 +1,4 @@
-import postService from "../services/blog";
+import postService from "../services/post";
 import toast from "react-hot-toast";
 
 const postReducer = (state = [], action) => {
@@ -7,8 +7,10 @@ const postReducer = (state = [], action) => {
             return [...state, action.data];
         case "UPDATE_POST":
             return state.map((post) =>
-                post.id != action.data.id ? post : action.data
+                post.id !== action.data.id ? post : action.data
             );
+        case "REMOVE_POST":
+            return state.filter((post) => post.id != action.data.id);
         case "INIT_POSTS":
             return action.data;
         default:
@@ -19,21 +21,69 @@ const postReducer = (state = [], action) => {
 //CONTROLADORES DE ACCION
 export const createPost = (content) => {
     return async (dispatch) => {
-        const newPost = await postService.create(content);
-        dispatch({
-            type: "NEW_POST",
-            data: newPost,
-        });
+        const img = await postService.createImg(content.file);
+        content = { ...content, file: img };
+        toast
+            .promise(postService.create(content), {
+                loading: "Guardando blog",
+                success: "Blog guardado correctamente",
+                error: "Hubo un error con el servidor",
+            })
+            .then((newPost) =>
+                dispatch({
+                    type: "NEW_POST",
+                    data: newPost,
+                })
+            );
     };
 };
 
 export const updatePost = (content) => {
     return async (dispatch) => {
+        if (content.file) {
+            const img = await postService.createImg(content.file);
+            content = { ...content, file: img };
+        }
+        toast
+            .promise(postService.update(content), {
+                loading: "Acualizando blog",
+                success: "Blog actualizado correctamente",
+                error: "Hubo un error con el servidor",
+            })
+            .then((updatedPost) =>
+                dispatch({
+                    type: "UPDATE_POST",
+                    data: updatedPost,
+                })
+            );
+
+        /*
+                
+            );
+        /*
         const updatedPost = await postService.update(content);
         dispatch({
             type: "UPDATE_POST",
             data: updatedPost,
-        });
+        });*/
+    };
+};
+
+export const removePost = (content) => {
+    console.log(content);
+    return async (dispatch) => {
+        toast
+            .promise(postService.remove(content), {
+                loading: "Borrando blog",
+                success: "Blogs eliminado correctamente",
+                error: "Hubo un error con el servidor",
+            })
+            .then(() =>
+                dispatch({
+                    type: "REMOVE_POST",
+                    data: content,
+                })
+            );
     };
 };
 
