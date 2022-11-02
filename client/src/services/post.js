@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/api/posts";
+const baseUrl = "https://lamablog-app.herokuapp.com/api/posts";
 
 const getToken = () => {
     let token = JSON.parse(window.localStorage.getItem("userLogged")).token;

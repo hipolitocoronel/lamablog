@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = 'http://localhost:3001/api'
+const baseUrl = 'https://lamablog-app.herokuapp.com/api'
 
 const login = async (user) => {
     const res = await axios.post(`${baseUrl}/login`, user);
