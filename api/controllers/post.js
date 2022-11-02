@@ -14,6 +14,8 @@ const getPosts = (req, res) => {
         return res.status(200).json(posts);
     });
 };
+
+
 const getPost = (req, res) => {
     const {
         params: { id },
@@ -30,6 +32,7 @@ const getPost = (req, res) => {
         return res.status(200).json(data.rows[0]);
     });
 };
+
 
 const addPost = (req, res) => {
     const { body } = req;
@@ -55,6 +58,7 @@ const addPost = (req, res) => {
         });
     });
 };
+
 
 const updatePost = (req, res) => {
     const { body } = req;
@@ -86,19 +90,18 @@ const updatePost = (req, res) => {
         });
     });
 };
+
+
 const removePost = (req, res) => {
-    const { body } = req;
+    const {
+        params: { id },
+    } = req;
 
-    console.log(req.token);
-    jwt.verify(req.token, process.env.SECRET, (err, decodedToken) => {
-        if (err) return res.status(401).json("Falta el token o es inválido");
+    const query = "DELETE FROM posts WHERE id = $1";
+    db.query(query, [id], (err, data) => {
+        if (err) return res.status(500).json(err.stack);
 
-        const query = "DELETE FROM posts WHERE id = $1";
-        db.query(query, [body.id], (err, data) => {
-            if (err) return res.status(500).json(err.stack);
-
-            return res.status(204).end();
-        });
+        return res.status(204).end();
     });
 };
 

@@ -38,15 +38,8 @@ const update = async (blog) => {
     return res.data;
 };
 
-const remove = async (blog) => {
-    const config = {
-        headers: {
-            Authorization: getToken(),
-        },
-    };
-
-    console.log(config);
-    const res = await axios.delete(baseUrl, blog, config);
+const remove = async (id) => {
+    const res = await axios.delete(`${baseUrl}/${id}`);
     return res.data;
 };
 

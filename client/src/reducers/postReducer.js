@@ -73,7 +73,7 @@ export const removePost = (content) => {
     console.log(content);
     return async (dispatch) => {
         toast
-            .promise(postService.remove(content), {
+            .promise(postService.remove(content.id), {
                 loading: "Borrando blog",
                 success: "Blogs eliminado correctamente",
                 error: "Hubo un error con el servidor",
